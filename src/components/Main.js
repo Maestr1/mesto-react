@@ -2,6 +2,7 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import api from '../utils/Api';
 import React from 'react';
+import Card from './Card';
 
 export default function Main(props) {
   const [userName, setUserName] = React.useState('');
@@ -15,14 +16,16 @@ export default function Main(props) {
         setUserName(userInfo.name);
         setUserDescription(userInfo.about);
         setUserAvatar(userInfo.avatar);
-        setCards([cardList])
-        // const userId = userInfo._id;
-        // userInfoHandler.setUserInfo(userInfo);
-        // userInfoHandler.updateUserAvatar(userInfo);
-        // cardLoader.renderItems(cardList)
+        setCards(cardList);
       })
+      // const userId = userInfo._id;
+      // userInfoHandler.setUserInfo(userInfo);
+      // userInfoHandler.updateUserAvatar(userInfo);
+      // cardLoader.renderItems(cardList)
+      // })
       .catch((res) => console.log(`Ошибка, запрос информации не выполнен. Текст ошибки: ${res}`));
-  });
+  }, []);
+
 
   return (
     <main className="main">
@@ -43,6 +46,9 @@ export default function Main(props) {
       </section>
       <section>
         <ul className="gallery container">
+          {cards.map(item=>(
+            <Card onCardClick={props.onCardClick} card={item}/>
+          ))}
         </ul>
       </section>
       <PopupWithForm onClose={props.onClose} isOpen={props.popupState.isEditProfilePopupOpen} name="edit-profile"
@@ -51,8 +57,8 @@ export default function Main(props) {
                      title="Новое место"/>
       <PopupWithForm onClose={props.onClose} isOpen={props.popupState.isEditAvatarPopupOpen} name="edit-avatar"
                      title="Обновить аватар"/>
-      <PopupWithForm onClose={props.onClose} name="confirm" title="Вы уверены?"/>
-      <ImagePopup/>
+      <PopupWithForm onClose={props.onClose}  name="confirm" title="Вы уверены?"/>
+      <ImagePopup onClose={props.onClose} isOpen={props.popupState.isImagePopupOpen} card={props.card}/>
     </main>
   );
 }

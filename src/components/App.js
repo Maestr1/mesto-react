@@ -8,6 +8,8 @@ export default function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState({card: ''});
+  const [isImagePopupOpen, setImagePopupOpen] = React.useState(false)
 
   function handleEditProfileClick() {
     setEditProfilePopupOpen(true);
@@ -21,33 +23,30 @@ export default function App() {
     setEditAvatarPopupOpen(true);
   }
 
+  function handleCardClick(card) {
+    setSelectedCard(card)
+    setImagePopupOpen(true);
+  }
+
   function closeAllPopups() {
-    setEditProfilePopupOpen(false)
-    setAddPlacePopupOpen(false)
-    setEditAvatarPopupOpen(false)
+    setEditProfilePopupOpen(false);
+    setAddPlacePopupOpen(false);
+    setEditAvatarPopupOpen(false);
+    setImagePopupOpen(false);
+    //setSelectedCard(null)
   }
 
   return (
 
     <div>
       <Header/>
-      <Main popupState={{isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen}}
-            onClose={closeAllPopups}
+      <Main popupState={{isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen, isImagePopupOpen}}
+            onClose={closeAllPopups} card={selectedCard} onCardClick={handleCardClick}
             onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}/>
       <Footer/>
       <template className="card-template">
-        <li className="gallery__card">
-          <img className="gallery__pic" src="src/components/App#" alt=""/>
-          <button className="gallery__remove-btn" aria-label="Удалить место"></button>
-          <div className="gallery__desc">
-            <h2 className="gallery__title"></h2>
-            <div className="gallery__like-wrap">
-              <button className="gallery__like-btn" aria-label="Поставить лайк"></button>
-              <p className="gallery__like-counter">err</p>
-            </div>
-          </div>
-        </li>
+
       </template>
     </div>
   );
