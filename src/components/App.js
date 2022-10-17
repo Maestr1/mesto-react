@@ -46,26 +46,20 @@ export default function App() {
       <Main onCardClick={handleCardClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}/>
       <PopupWithForm onClose={closeAllPopups} isOpen={isEditProfilePopupOpen} name="edit-profile"
-                     title="Редактировать профиль">
+                     title="Редактировать профиль" buttonText="Сохранить">>
         <FormInput name="name" type="text" placeholder="Имя" id="name" minLength="2" maxLength="40"/>
         <FormInput name="about" type="text" placeholder="Профессия" id="job" minLength="2" maxLength="200"/>
-        <button className="popup__submit-btn" type="submit">Сохранить</button>
       </PopupWithForm>
       <PopupWithForm onClose={closeAllPopups} isOpen={isAddPlacePopupOpen} name="add-place"
-                     title="Новое место">
-
+                     title="Новое место" buttonText="Сохранить">>
         <FormInput name="placeName" type="text" placeholder="Название" id="name" minLength="2" maxLength="30"/>
         <FormInput name="placeLink" type="url" placeholder="Ссылка на картинку" id="link"/>
-        <button className="popup__submit-btn" type="submit">Сохранить</button>
       </PopupWithForm>
       <PopupWithForm onClose={closeAllPopups} isOpen={isEditAvatarPopupOpen} name="edit-avatar"
-                     title="Обновить аватар">
+                     title="Обновить аватар" buttonText="Сохранить">
         <FormInput name="link" type="url" placeholder="Ссылка на картинку" id="link" minLength="2"/>
-        <button className="popup__submit-btn" type="submit">Сохранить</button>
       </PopupWithForm>
-      <PopupWithForm onClose={closeAllPopups} name="confirm" title="Вы уверены?">
-        <button className="popup__submit-btn" type="submit">Да</button>
-      </PopupWithForm>
+      <PopupWithForm onClose={closeAllPopups} name="confirm" title="Вы уверены?" buttonText="Да"/>
       <ImagePopup onClose={closeAllPopups} isOpen={isImagePopupOpen} card={selectedCard}/>
       <Footer/>
     </div>
