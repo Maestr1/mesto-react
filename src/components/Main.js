@@ -1,16 +1,14 @@
-import PopupWithForm from './PopupWithForm';
-import ImagePopup from './ImagePopup';
 import api from '../utils/api';
-import React from 'react';
+import {useEffect, useState} from 'react';
 import Card from './Card';
 
-export default function Main(props) {
-  const [userName, setUserName] = React.useState('');
-  const [userDescription, setUserDescription] = React.useState('');
-  const [userAvatar, setUserAvatar] = React.useState('');
-  const [cards, setCards] = React.useState([]);
+export default function Main({onAddPlace, onCardClick, onEditAvatar, onEditProfile}) {
+  const [userName, setUserName] = useState('');
+  const [userDescription, setUserDescription] = useState('');
+  const [userAvatar, setUserAvatar] = useState('');
+  const [cards, setCards] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     Promise.all([api.requestUserInfo(), api.requestCardList()])
       .then(([userInfo, cardList]) => {
         setUserName(userInfo.name);
@@ -31,34 +29,27 @@ export default function Main(props) {
     <main className="main">
       <section className="profile container">
         <div className="profile__wrap">
-          <div onClick={props.onEditAvatar} className="profile__avatar-edit-btn"><img className="profile__avatar"
+          <div onClick={onEditAvatar} className="profile__avatar-edit-btn"><img className="profile__avatar"
                                                                                       src={userAvatar}
                                                                                       alt="Фото пользователя"/>
           </div>
           <div className="profile__desc">
             <h1 className="profile__name">{userName}</h1>
             <p className="profile__job">{userDescription}</p>
-            <button onClick={props.onEditProfile} className="btn profile__edit-btn"
+            <button onClick={onEditProfile} className="btn profile__edit-btn"
                     aria-label="Редактировать профиль"></button>
           </div>
         </div>
-        <button onClick={props.onAddPlace} className="btn profile__add-btn" aria-label="Добавить место"></button>
+        <button onClick={onAddPlace} className="btn profile__add-btn" aria-label="Добавить место"></button>
       </section>
       <section>
         <ul className="gallery container">
           {cards.map(item=>(
-            <Card onCardClick={props.onCardClick} card={item}/>
+            <Card onCardClick={onCardClick} card={item}/>
           ))}
         </ul>
       </section>
-      <PopupWithForm onClose={props.onClose} isOpen={props.popupState.isEditProfilePopupOpen} name="edit-profile"
-                     title="Редактировать профиль"/>
-      <PopupWithForm onClose={props.onClose} isOpen={props.popupState.isAddPlacePopupOpen} name="add-place"
-                     title="Новое место"/>
-      <PopupWithForm onClose={props.onClose} isOpen={props.popupState.isEditAvatarPopupOpen} name="edit-avatar"
-                     title="Обновить аватар"/>
-      <PopupWithForm onClose={props.onClose}  name="confirm" title="Вы уверены?"/>
-      <ImagePopup onClose={props.onClose} isOpen={props.popupState.isImagePopupOpen} card={props.card}/>
+
     </main>
   );
 }
