@@ -7,6 +7,7 @@ import ImagePopup from './ImagePopup';
 import FormInput from './FormInput';
 import api from '../utils/api';
 import CurrentUserContext from '../contexts/CurrentUserContext';
+import EditProfilePopup from './EditProfilePopup';
 
 export default function App() {
 
@@ -15,13 +16,42 @@ export default function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({card: ''});
   const [isImagePopupOpen, setImagePopupOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState({name: '', about: ''});
+  const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    api.requestUserInfo()
-      .then(res => setCurrentUser(res))
-      .catch((res) => console.log(`Ошибка, запрос информации не выполнен. Текст ошибки: ${res}`));
-  });
+    Promise.all([api.requestUserInfo(), api.requestCardList()])
+      .then(([userInfo, cardList]) => {
+        setCurrentUser(userInfo);
+        setCards(cardList);
+      })
+      .catch(res => console.log(`Ошибка, запрос информации не выполнен. Текст ошибки: ${res}`));
+  }, []);
+
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(item => item._id === currentUser._id);
+    api.toggleLike(card._id, isLiked)
+      .then(newCard => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+      })
+      .catch(err => console.log(`Ошибка лайка. Текст ошибки: ${err}`));
+  }
+
+  function handleCardDelete(card) {
+    api.removeCard(card._id)
+      .then(() => {
+        setCards(cards.filter(i => i !== card));
+      });
+  }
+
+  function handleUpdateUser(name, about) {
+    api.patchUserInfo(name, about)
+      .then(res => {
+        setCurrentUser(res);
+        closeAllPopups();
+      })
+      .catch(err => console.log(`Ошибка, данные не отправлены. Текст ошибки: ${err}`));
+  }
 
   function handleEditProfileClick() {
     setEditProfilePopupOpen(true);
@@ -52,13 +82,10 @@ export default function App() {
 
     <CurrentUserContext.Provider value={currentUser}>
       <Header/>
-      <Main onCardClick={handleCardClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
+      <Main onCardDelete={handleCardDelete} onCardLike={handleCardLike} cards={cards} onCardClick={handleCardClick}
+            onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}/>
-      <PopupWithForm onClose={closeAllPopups} isOpen={isEditProfilePopupOpen} name="edit-profile"
-                     title="Редактировать профиль" buttonText="Сохранить">>
-        <FormInput name="name" type="text" placeholder="Имя" id="name" minLength="2" maxLength="40"/>
-        <FormInput name="about" type="text" placeholder="Профессия" id="job" minLength="2" maxLength="200"/>
-      </PopupWithForm>
+      <EditProfilePopup onUpdateUser={handleUpdateUser} onClose={closeAllPopups} isOpen={isEditProfilePopupOpen}/>
       <PopupWithForm onClose={closeAllPopups} isOpen={isAddPlacePopupOpen} name="add-place"
                      title="Новое место" buttonText="Сохранить">>
         <FormInput name="placeName" type="text" placeholder="Название" id="name" minLength="2" maxLength="30"/>

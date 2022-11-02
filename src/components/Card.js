@@ -1,20 +1,36 @@
-import React from 'react';
+import {useContext} from 'react';
+import CurrentUserContext from '../contexts/CurrentUserContext';
 
-export default function Card({onCardClick, card}) {
+export default function Card({onCardDelete, onCardLike, onCardClick, card}) {
+
+  const currentUser = useContext(CurrentUserContext);
+  const isOwn = card.owner._id === currentUser._id;
+  const cardRemoveBtnClassName = (`card__remove-btn ${isOwn ? 'card__remove-btn_active' : 'card__remove-btn_inactive'}`);
+  const isLiked = card.likes.some(item => item._id === currentUser._id);
+  const cardLikeBtnClassName = `card__like-btn ${isLiked ? 'card__like-btn_liked' : 'card__like-btn_notLiked'}`;
 
   function handleClick() {
-    onCardClick(card)
+    onCardClick(card);
   }
 
+  function handleLikeClick() {
+    onCardLike(card);
+  }
+
+  function handleDeleteClick() {
+    onCardDelete(card);
+  }
+
+
   return (
-    <li className="gallery__card">
-      <img onClick={handleClick} className="gallery__pic" src={card.link} alt={`На картинке ${card.name}`}/>
-      <button className="gallery__remove-btn" aria-label="Удалить место"></button>
-      <div className="gallery__desc">
-        <h2 className="gallery__title">{card.name}</h2>
-        <div className="gallery__like-wrap">
-          <button className="gallery__like-btn" aria-label="Поставить лайк"></button>
-          <p className="gallery__like-counter">err</p>
+    <li className="gallery__card card">
+      <img onClick={handleClick} className="card__pic" src={card.link} alt={`На картинке ${card.name}`}/>
+      <button onClick={handleDeleteClick} className={cardRemoveBtnClassName} aria-label="Удалить место"></button>
+      <div className="card__desc">
+        <h2 className="card__title">{card.name}</h2>
+        <div className="card__like-wrap">
+          <button onClick={handleLikeClick} className={cardLikeBtnClassName} aria-label="Поставить лайк"></button>
+          <p className="card__like-counter">err</p>
         </div>
       </div>
     </li>

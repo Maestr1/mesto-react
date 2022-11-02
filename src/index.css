@@ -27,16 +27,17 @@
 /* -----------------Gallery styles----------------- */
 
 @import url(./blocks/gallery/gallery.css);
-@import url(./blocks/gallery/__card/gallery__card.css);
-@import url(./blocks/gallery/__desc/gallery__desc.css);
-@import url(./blocks/gallery/__pic/gallery__pic.css);
-@import url(./blocks/gallery/__title/gallery__title.css);
-@import url(./blocks/gallery/__like-btn/gallery__like-btn.css);
-@import url(./blocks/gallery/__like-btn/_liked/gallery__like-btn_liked.css);
-@import url(./blocks/gallery/__like-wrap/gallery__like-wrap.css);
-@import url(./blocks/gallery/__like-counter/gallery__like-counter.css);
-@import url(./blocks/gallery/__remove-btn/gallery__remove-btn.css);
-@import url(./blocks/gallery/__remove-btn/_active/gallery__remove-btn_active.css);
+@import url(./blocks/card/card.css);
+@import url(./blocks/card/__desc/card__desc.css);
+@import url(./blocks/card/__pic/card__pic.css);
+@import url(./blocks/card/__title/card__title.css);
+@import url(./blocks/card/__like-btn/card__like-btn.css);
+@import url(./blocks/card/__like-btn/_liked/card__like-btn_liked.css);
+@import url(./blocks/card/__like-wrap/card__like-wrap.css);
+@import url(./blocks/card/__like-counter/card__like-counter.css);
+@import url(./blocks/card/__remove-btn/card__remove-btn.css);
+@import url(./blocks/card/__remove-btn/_active/card__remove-btn_active.css);
+@import url(./blocks/card/__remove-btn/_inactive/card__remove-btn_inactive.css);
 
 /* -----------------Popup styles----------------- */
 

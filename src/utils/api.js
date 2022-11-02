@@ -23,14 +23,11 @@ class Api {
   }
 
 //Изменение данных пользоваьеля
-  patchUserInfo(formValue) {
+  patchUserInfo(name, about) {
     return fetch(`${this._options.baseUrl}/users/me`, {
       method: 'PATCH',
       headers: this._options.headers,
-      body: JSON.stringify({
-        name: formValue.name,
-        about: formValue.about
-      })
+      body: JSON.stringify(name, about)
     })
       .then(res => this._onResponse(res));
   }
@@ -78,12 +75,20 @@ class Api {
   }
 
   //Поставить/снять лайк
-  putLike(cardId) {
-    return fetch(`${this._options.baseUrl}/cards/${cardId}/likes`, {
-      method: 'PUT',
-      headers: this._options.headers
-    })
-      .then(res => this._onResponse(res));
+  toggleLike(cardId, isLiked) {
+    if (isLiked) {
+      return fetch(`${this._options.baseUrl}/cards/${cardId}/likes`, {
+        method: 'DELETE',
+        headers: this._options.headers
+      })
+        .then(res => this._onResponse(res));
+    } else {
+      return fetch(`${this._options.baseUrl}/cards/${cardId}/likes`, {
+        method: 'PUT',
+        headers: this._options.headers
+      })
+        .then(res => this._onResponse(res));
+    }
   }
 
   removeLike(cardId) {
@@ -96,5 +101,5 @@ class Api {
   }
 }
 
-const api = new Api(apiConfig)
-export default api
+const api = new Api(apiConfig);
+export default api;

@@ -1,4 +1,4 @@
-.gallery__like-btn {
+.card__like-btn {
   cursor: pointer;
   padding: 0;
   padding-left: 22px;
@@ -12,7 +12,7 @@
 
 
 @media (min-width: 1100px) {
-  .gallery__like-btn:hover {
+  .card__like-btn:hover {
     opacity: .5;
   }
 }
