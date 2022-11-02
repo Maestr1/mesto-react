@@ -1,18 +1,27 @@
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import React from 'react';
+import {useEffect, useState} from 'react';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import FormInput from './FormInput';
+import api from '../utils/api';
+import CurrentUserContext from '../contexts/CurrentUserContext';
 
 export default function App() {
 
-  const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
-  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({card: ''});
-  const [isImagePopupOpen, setImagePopupOpen] = React.useState(false);
+  const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({card: ''});
+  const [isImagePopupOpen, setImagePopupOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    api.requestUserInfo()
+      .then(res => setCurrentUser(res))
+      .catch((res) => console.log(`Ошибка, запрос информации не выполнен. Текст ошибки: ${res}`));
+  });
 
   function handleEditProfileClick() {
     setEditProfilePopupOpen(true);
@@ -41,7 +50,7 @@ export default function App() {
 
   return (
 
-    <div>
+    <CurrentUserContext.Provider value={currentUser}>
       <Header/>
       <Main onCardClick={handleCardClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}/>
@@ -62,6 +71,6 @@ export default function App() {
       <PopupWithForm onClose={closeAllPopups} name="confirm" title="Вы уверены?" buttonText="Да"/>
       <ImagePopup onClose={closeAllPopups} isOpen={isImagePopupOpen} card={selectedCard}/>
       <Footer/>
-    </div>
+    </CurrentUserContext.Provider>
   );
 }
