@@ -17,6 +17,7 @@ export default function EditAvatarPopup({onUpdateAvatar, onClose, isOpen}) {
                id={`popup-edit-input-link`} required minLength="2"/>
         <span id={`popup-edit-input-link-error`} className="popup__input-error"></span>
       </div>
+
     </PopupWithForm>
   );
 }

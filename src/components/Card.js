@@ -30,7 +30,7 @@ export default function Card({onCardDelete, onCardLike, onCardClick, card}) {
         <h2 className="card__title">{card.name}</h2>
         <div className="card__like-wrap">
           <button onClick={handleLikeClick} className={cardLikeBtnClassName} aria-label="Поставить лайк"></button>
-          <p className="card__like-counter">err</p>
+          <p className="card__like-counter">{card.likes.length}</p>
         </div>
       </div>
     </li>
