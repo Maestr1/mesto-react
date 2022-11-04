@@ -1,11 +1,9 @@
-import api from '../utils/api';
-import {useEffect, useState, useContext} from 'react';
+import {useContext} from 'react';
 import Card from './Card';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 
 export default function Main({onCardDelete, onCardLike, cards, onAddPlace, onCardClick, onEditAvatar, onEditProfile}) {
   const currentUser = useContext(CurrentUserContext)
-  //const [cardsTemp, setCards] = useState([]);
 
 
   // useEffect(() => {

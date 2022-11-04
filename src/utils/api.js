@@ -32,12 +32,12 @@ class Api {
       .then(res => this._onResponse(res));
   }
 
-  patchUserAvatar(formValue) {
+  patchUserAvatar(link) {
     return fetch(`${this._options.baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._options.headers,
       body: JSON.stringify({
-        avatar: formValue.link
+        avatar: link
       })
     })
       .then(res => this._onResponse(res));
@@ -53,14 +53,11 @@ class Api {
   }
 
   //Отправка новой корточки на сервер
-  postCard(formValue) {
+  postCard(name, link) {
     return fetch(`${this._options.baseUrl}/cards`, {
       method: 'POST',
       headers: this._options.headers,
-      body: JSON.stringify({
-        name: formValue.placeName,
-        link: formValue.placeLink
-      })
+      body: JSON.stringify(name, link)
     })
       .then(res => this._onResponse(res));
   }

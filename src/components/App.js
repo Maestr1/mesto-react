@@ -4,10 +4,11 @@ import Footer from './Footer';
 import {useEffect, useState} from 'react';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
-import FormInput from './FormInput';
 import api from '../utils/api';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
 
 export default function App() {
 
@@ -25,8 +26,17 @@ export default function App() {
         setCurrentUser(userInfo);
         setCards(cardList);
       })
-      .catch(res => console.log(`Ошибка, запрос информации не выполнен. Текст ошибки: ${res}`));
+      .catch(res => console.log(`Запрос информации не выполнен. Текст ошибки: ${res}`));
   }, []);
+
+  function handleAddPlaceSubmit(name, link) {
+    api.postCard(name, link)
+      .then(res => {
+        setCards([res, ...cards]);
+        closeAllPopups();
+      })
+      .catch(err => console.log(`Ошибка, карточка не добавлена. Текст ошибки: ${err}`));
+  }
 
   function handleCardLike(card) {
     const isLiked = card.likes.some(item => item._id === currentUser._id);
@@ -50,7 +60,16 @@ export default function App() {
         setCurrentUser(res);
         closeAllPopups();
       })
-      .catch(err => console.log(`Ошибка, данные не отправлены. Текст ошибки: ${err}`));
+      .catch(err => console.log(`Данные не отправлены. Текст ошибки: ${err}`));
+  }
+
+  function handleUpdateAvatar(link) {
+    api.patchUserAvatar(link)
+      .then(res => {
+        setCurrentUser(res);
+        closeAllPopups();
+      })
+      .catch(err => console.log(`Данные не отправлены. Текст ошибки: ${err}`));
   }
 
   function handleEditProfileClick() {
@@ -86,15 +105,8 @@ export default function App() {
             onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}/>
       <EditProfilePopup onUpdateUser={handleUpdateUser} onClose={closeAllPopups} isOpen={isEditProfilePopupOpen}/>
-      <PopupWithForm onClose={closeAllPopups} isOpen={isAddPlacePopupOpen} name="add-place"
-                     title="Новое место" buttonText="Сохранить">>
-        <FormInput name="placeName" type="text" placeholder="Название" id="name" minLength="2" maxLength="30"/>
-        <FormInput name="placeLink" type="url" placeholder="Ссылка на картинку" id="link"/>
-      </PopupWithForm>
-      <PopupWithForm onClose={closeAllPopups} isOpen={isEditAvatarPopupOpen} name="edit-avatar"
-                     title="Обновить аватар" buttonText="Сохранить">
-        <FormInput name="link" type="url" placeholder="Ссылка на картинку" id="link" minLength="2"/>
-      </PopupWithForm>
+      <AddPlacePopup onAddPlace={handleAddPlaceSubmit} onClose={closeAllPopups} isOpen={isAddPlacePopupOpen}/>
+      <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} onClose={closeAllPopups} isOpen={isEditAvatarPopupOpen}/>
       <PopupWithForm onClose={closeAllPopups} name="confirm" title="Вы уверены?" buttonText="Да"/>
       <ImagePopup onClose={closeAllPopups} isOpen={isImagePopupOpen} card={selectedCard}/>
       <Footer/>
