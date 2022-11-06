@@ -48,8 +48,7 @@ class Api {
     return fetch(`${this._options.baseUrl}/cards`, {
       headers: this._options.headers
     })
-      .then(res => this._onResponse(res))
-      .catch(err => console.log(`Ошибка, не получен список карточек. Текст ошибки: ${err}`));
+      .then(res => this._onResponse(res));
   }
 
   //Отправка новой корточки на сервер
@@ -86,15 +85,6 @@ class Api {
       })
         .then(res => this._onResponse(res));
     }
-  }
-
-  removeLike(cardId) {
-    return fetch(`${this._options.baseUrl}/cards/${cardId}/likes`, {
-      method: 'DELETE',
-      headers: this._options.headers
-    })
-      .then(res => this._onResponse(res));
-
   }
 }
 

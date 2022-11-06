@@ -11,6 +11,18 @@
   /*transition: background-color .2s ease-in-out;*/
 }
 
+.popup__submit-btn:disabled {
+  background-color: #fff;
+  color: #000;
+  opacity: .2;
+}
+
+@media (min-width: 1100px) {
+  .popup__submit-btn:disabled:hover{
+    opacity: .2;
+  }
+}
+
 @media (min-width: 1100px) {
   .popup__submit-btn:hover {
     opacity: 0.8;

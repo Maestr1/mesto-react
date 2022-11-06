@@ -23,7 +23,7 @@ export default function Card({onCardDelete, onCardLike, onCardClick, card}) {
 
 
   return (
-    <li className="gallery__card card">
+    <div className="gallery__card card">
       <img onClick={handleClick} className="card__pic" src={card.link} alt={`На картинке ${card.name}`}/>
       <button onClick={handleDeleteClick} className={cardRemoveBtnClassName} aria-label="Удалить место"></button>
       <div className="card__desc">
@@ -33,6 +33,6 @@ export default function Card({onCardDelete, onCardLike, onCardClick, card}) {
           <p className="card__like-counter">{card.likes.length}</p>
         </div>
       </div>
-    </li>
+    </div>
   );
 }

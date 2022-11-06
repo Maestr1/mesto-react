@@ -12,11 +12,11 @@ import AddPlacePopup from './AddPlacePopup';
 
 export default function App() {
 
-  const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
-  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({card: ''});
-  const [isImagePopupOpen, setImagePopupOpen] = useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({name: '', about: ''});
   const [cards, setCards] = useState([]);
 
@@ -50,8 +50,10 @@ export default function App() {
   function handleCardDelete(card) {
     api.removeCard(card._id)
       .then(() => {
-        setCards(cards.filter(i => i !== card));
-      });
+        setCards((cards) => cards.filter(i => i !== card));
+        //setCards(cards.filter(i => i !== card));
+      })
+      .catch(err => console.log(`Карточка не удалена. Текст ошибки: ${err}`));
   }
 
   function handleUpdateUser(name, about) {
@@ -73,27 +75,27 @@ export default function App() {
   }
 
   function handleEditProfileClick() {
-    setEditProfilePopupOpen(true);
+    setIsEditProfilePopupOpen(true);
   }
 
   function handleAddPlaceClick() {
-    setAddPlacePopupOpen(true);
+    setIsAddPlacePopupOpen(true);
   }
 
   function handleEditAvatarClick() {
-    setEditAvatarPopupOpen(true);
+    setIsEditAvatarPopupOpen(true);
   }
 
   function handleCardClick(card) {
     setSelectedCard(card);
-    setImagePopupOpen(true);
+    setIsImagePopupOpen(true);
   }
 
   function closeAllPopups() {
-    setEditProfilePopupOpen(false);
-    setAddPlacePopupOpen(false);
-    setEditAvatarPopupOpen(false);
-    setImagePopupOpen(false);
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
+    setIsImagePopupOpen(false);
     //setSelectedCard(null)
   }
 
@@ -101,13 +103,19 @@ export default function App() {
 
     <CurrentUserContext.Provider value={currentUser}>
       <Header/>
-      <Main onCardDelete={handleCardDelete} onCardLike={handleCardLike} cards={cards} onCardClick={handleCardClick}
-            onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
+      <Main onCardDelete={handleCardDelete}
+            onCardLike={handleCardLike} cards={cards}
+            onCardClick={handleCardClick}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}/>
       <EditProfilePopup onUpdateUser={handleUpdateUser} onClose={closeAllPopups} isOpen={isEditProfilePopupOpen}/>
       <AddPlacePopup onAddPlace={handleAddPlaceSubmit} onClose={closeAllPopups} isOpen={isAddPlacePopupOpen}/>
       <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} onClose={closeAllPopups} isOpen={isEditAvatarPopupOpen}/>
-      <PopupWithForm onClose={closeAllPopups} name="confirm" title="Вы уверены?" buttonText="Да"/>
+      <PopupWithForm onClose={closeAllPopups}
+                     name="confirm"
+                     title="Вы уверены?"
+                     buttonText="Да"/>
       <ImagePopup onClose={closeAllPopups} isOpen={isImagePopupOpen} card={selectedCard}/>
       <Footer/>
     </CurrentUserContext.Provider>
