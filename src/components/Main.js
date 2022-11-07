@@ -5,12 +5,11 @@ import CurrentUserContext from '../contexts/CurrentUserContext';
 export default function Main({onCardDelete, onCardLike, cards, onAddPlace, onCardClick, onEditAvatar, onEditProfile}) {
   const currentUser = useContext(CurrentUserContext);
 
-  const cardsElement = cards.map((item, i) => (
-    <li key={i}><Card key={item._id}
-                      onCardDelete={onCardDelete}
-                      onCardLike={onCardLike}
-                      onCardClick={onCardClick}
-                      card={item}/></li>
+  const cardsElement = cards.map((item) => (
+    <li key={item._id}><Card onCardDelete={onCardDelete}
+                             onCardLike={onCardLike}
+                             onCardClick={onCardClick}
+                             card={item}/></li>
   ));
 
 
